@@ -35,7 +35,7 @@ private:
 	CardSuit m_suit;
 
 public:
-	Card(CardRank rank = Card::CardRank::MAX_RANKS, CardSuit suit = Card::CardSuit::MAX_SUITS);
+	explicit Card(CardRank rank = Card::CardRank::MAX_RANKS, CardSuit suit = Card::CardSuit::MAX_SUITS);
 
 	void printCard() const;
 

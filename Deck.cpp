@@ -1,11 +1,13 @@
 #include "Deck.h"
 #include <iostream>
+#include <cstdlib> // for rand() and srand()
+#include <cassert>
 
 Deck::Deck()
 {
-	for (int i = 0; i < static_cast<int>(Card::CardRank::MAX_RANKS); i++)
+	for (int i = 0; i < static_cast<int>(Card::CardRank::MAX_RANKS); ++i)
 	{
-		for (int j = 0; j < static_cast<int>(Card::CardSuit::MAX_SUITS); j++)
+		for (int j = 0; j < static_cast<int>(Card::CardSuit::MAX_SUITS); ++j)
 		{
 			mDeck[static_cast<int>(Card::CardSuit::MAX_SUITS) * i + j] = Card(static_cast<Card::CardRank>(i), static_cast<Card::CardSuit>(j));
 		}

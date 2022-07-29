@@ -1,4 +1,5 @@
 ﻿#include "Blackjack.h"
+#include <ctime> // for time()
 
 int main()
 {

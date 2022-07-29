@@ -1,10 +1,8 @@
 #ifndef DECK_H
 #define DECK_H
 
+
 #include <array>
-#include <ctime> // for time()
-#include <cstdlib> // for rand() and srand()
-#include <cassert>
 #include "Card.h"
 
 class Deck
