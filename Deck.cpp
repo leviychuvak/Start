@@ -36,7 +36,7 @@ void Deck::printDeck() const
 		std::cout << ' ';
 	}
 
-	std::cout << '\n';
+	std::cout << std::endl;
 }
 
 void Deck::shuffleDeck()
