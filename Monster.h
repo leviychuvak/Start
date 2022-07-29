@@ -3,7 +3,7 @@
 class Monster
 {
 public:
-    enum MonsterType
+    enum class MonsterType
     {
         Dragon,
         Goblin,
@@ -19,7 +19,7 @@ public:
 private:
     MonsterType type;
     std::string name;
-    int health;
+    int health{};
 
     std::string getTypeString() const;
 

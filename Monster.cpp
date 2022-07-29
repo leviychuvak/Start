@@ -1,21 +1,20 @@
 #include "Monster.h"
 
-
-Monster::Monster(MonsterType type, std::string name, int health)
-	:type(type), name(name), health(health)
+Monster::Monster(MonsterType aType, std::string aName, int aHealth)
+	:type(aType), name(std::move(aName)), health(aHealth)
 {}
 
 std::string Monster::getTypeString() const {
 	switch (this->type)
 	{
-	case Dragon: return "dragon";
-	case Goblin: return "goblin";
-	case Ogre: return "ogre";
-	case Orc: return "orc";
-	case Skeleton: return "skeleton";
-	case Troll: return "troll";
-	case Vampire: return "vampire";
-	case Zombie: return "zombie";
+	case MonsterType::Dragon: return "dragon";
+	case MonsterType::Goblin: return "goblin";
+	case MonsterType::Ogre: return "ogre";
+	case MonsterType::Orc: return "orc";
+	case MonsterType::Skeleton: return "skeleton";
+	case MonsterType::Troll: return "troll";
+	case MonsterType::Vampire: return "vampire";
+	case MonsterType::Zombie: return "zombie";
 	default: return " ";
 	}
 
