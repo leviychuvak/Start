@@ -8,11 +8,12 @@ class Blackjack
 private:
 	Deck deck;
 
-	char getPlayerChoice();
+private:
+	char getPlayerChoice() const;
 
 	bool playBlackjack();
 
-	bool playAgain();
+	bool playAgain() const;
 
 public:
 	Blackjack();

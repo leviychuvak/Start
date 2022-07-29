@@ -1,12 +1,10 @@
 #ifndef CARD_H
 #define CARD_H
 
-#include <iostream>
-
 class Card
 {
 public:
-	enum CardSuit
+	enum class CardSuit
 	{
 		SUIT_CLUB,
 		SUIT_DIAMOND,
@@ -14,7 +12,7 @@ public:
 		SUIT_SPADE,
 		MAX_SUITS
 	};
-	enum CardRank
+	enum class CardRank
 	{
 		RANK_2,
 		RANK_3,
@@ -37,7 +35,7 @@ private:
 	CardSuit m_suit;
 
 public:
-	Card(CardRank rank = Card::MAX_RANKS, CardSuit suit = Card::MAX_SUITS);
+	Card(CardRank rank = Card::CardRank::MAX_RANKS, CardSuit suit = Card::CardSuit::MAX_SUITS);
 
 	void printCard() const;
 

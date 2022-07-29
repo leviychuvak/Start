@@ -1,10 +1,11 @@
 #include "Blackjack.h"
+#include <iostream>
 
 Blackjack::Blackjack() {
-	this->deck.shuffleDeck();
+	deck.shuffleDeck();
 }
 
-char Blackjack::getPlayerChoice()
+char Blackjack::getPlayerChoice() const
 {
 	std::cout << "(h) to hit, or (s) to stand: ";
 	char choice;
@@ -17,26 +18,28 @@ char Blackjack::getPlayerChoice()
 }
 
 bool Blackjack::playBlackjack() {
+
+	deck.shuffleDeck();
 	int playerTotal = 0;
 	int dealerTotal = 0;
 
-	// Дилер получает одну карту
+	// Dealer gets one card
 	dealerTotal += deck.dealCard().getCardValue();
 	std::cout << "The dealer is showing: " << dealerTotal << '\n';
 
-	// Игрок получает две карты
+	// Player gets two cards
 	playerTotal += deck.dealCard().getCardValue();
 	playerTotal += deck.dealCard().getCardValue();
 
 	std::cout << "You have: " << playerTotal << '\n';
 
-	// Если сразу выпало 2 туза
+	// If 2 aces immediately fell out
 	if (playerTotal > 21)
 	{
 		return false;
 	}
 
-	// Игрок начинает
+	// Player starts
 	while (true)
 	{
 		char choice = getPlayerChoice();
@@ -46,26 +49,26 @@ bool Blackjack::playBlackjack() {
 		playerTotal += deck.dealCard().getCardValue();
 		std::cout << "You have: " << playerTotal << '\n';
 
-		// Смотрим, не проиграл ли игрок
+		// Check, if the player has lost
 		if (playerTotal > 21)
 			return false;
 	}
 
-	// Если игрок не проиграл (у него не больше 21 очка), тогда дилер получает карты до тех пор, пока у него в сумме будет не меньше 17 очков
+	// If the player hasn't lost (he has not more than 21 points), then the dealer receives cards until he has a total of at least 17 points
 	while (dealerTotal < 17)
 	{
 		dealerTotal += deck.dealCard().getCardValue();
 		std::cout << "The dealer now has: " << dealerTotal << '\n';
 	}
 
-	// Если у дилера больше 21, то он проиграл, а игрок выиграл
+	// If the dealer has more than 21, then he lost, and the player won
 	if (dealerTotal > 21)
 		return true;
 
 	return (playerTotal >= dealerTotal);
 }
 
-bool Blackjack::playAgain()
+bool Blackjack::playAgain() const
 {
 	std::cout << "\n\nDo you want to play again (y/n)? ";
 	char choice;
@@ -81,7 +84,7 @@ bool Blackjack::playAgain()
 void Blackjack::play() {
 	do
 	{
-		if (this->playBlackjack())
+		if (playBlackjack())
 			std::cout << "You win!\n";
 		else
 			std::cout << "You lose!\n";

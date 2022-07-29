@@ -2,21 +2,23 @@
 #define DECK_H
 
 #include <array>
-#include <ctime> // для time()
-#include <cstdlib> // для rand() и srand()
+#include <ctime> // for time()
+#include <cstdlib> // for rand() and srand()
 #include <cassert>
 #include "Card.h"
 
 class Deck
 {
 private:
-	std::array<Card, 52> m_deck;
+	static constexpr size_t MAX_CARD_COUNT = 52;
+	std::array<Card, MAX_CARD_COUNT> mDeck;
 	int m_cardIndex = 0;
-
+	
+private:
 	static void swapCard(Card& a, Card& b);
 
-	// Генерируем случайное число между min и max (включительно).
-	// Предполагается, что srand() уже был вызван
+	// Generate random number between min and max (inclusive).
+	// Supposed, that srand() has been called
 	static int getRandomNumber(int min, int max);
 
 public:
