@@ -8,7 +8,7 @@ Blackjack::Blackjack() {
 char Blackjack::getPlayerChoice() const
 {
 	std::cout << "(h) to hit, or (s) to stand: ";
-	char choice;
+	char choice{};
 	do
 	{
 		std::cin >> choice;
@@ -71,7 +71,7 @@ bool Blackjack::playBlackjack() {
 bool Blackjack::playAgain() const
 {
 	std::cout << "\n\nDo you want to play again (y/n)? ";
-	char choice;
+	char choice{};
 	do
 	{
 		std::cin >> choice;
