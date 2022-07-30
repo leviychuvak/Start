@@ -15,10 +15,9 @@ std::string Monster::getTypeString() const {
 	case MonsterType::Troll: return "troll";
 	case MonsterType::Vampire: return "vampire";
 	case MonsterType::Zombie: return "zombie";
-	default: return " ";
 	}
 
-	return " ";
+	throw std::logic_error("Something went wrong, unknown MonsterType in getTypeString");
 }
 
 void Monster::print() const {
