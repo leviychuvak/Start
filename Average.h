@@ -13,7 +13,7 @@ private:
 	int calculateAverage() const;
 
 public:
-	Average() :m_sum(0), m_counter(0) {}
+	Average() = default;
 
 	Average& operator+=(int aNumber);
 

@@ -1,5 +1,4 @@
 ﻿#include <iostream>
-#include <cassert>
 #include "Average.h"
 #include "IntArray.h"
 #include "FixedPoint.h"

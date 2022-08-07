@@ -12,8 +12,10 @@ IntArray::IntArray(const int aLength)
 IntArray::IntArray(const IntArray& other)
 	:m_length(other.m_length)											//Length is integer value, so we can use shallow copying for it
 {																		//Dynamically allocated array must be copied with deep copying
+	/*
 	//Check if source array is empty
 	assert(other.m_array != nullptr && "Source has no elements");
+	*/
 
 	//Allocate memory for a new array and initialize all values with 0
 	m_array = new int[m_length] {0};
@@ -31,9 +33,11 @@ IntArray::~IntArray() {
 IntArray& IntArray::operator=(const IntArray& other) {
 	//checking for self assignment
 	if (this == &other) return *this;
-
+	
+	/*
 	//Check if source array is empty
 	assert(other.m_array != nullptr && "Right argument has no elements");
+	*/
 
 	//Delete previous content of array
 	delete[] m_array;
@@ -47,7 +51,7 @@ IntArray& IntArray::operator=(const IntArray& other) {
 	return *this;
 }
 
-int& IntArray::operator[](const int index) {
+int& IntArray::operator[](int index) {
 	assert(index >= 0 && index < m_length && "Index out of range."); //Check if index in range
 
 	return m_array[index];

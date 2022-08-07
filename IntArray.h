@@ -10,13 +10,13 @@ private:
 	int m_length{ 0 };
 
 public:
-	IntArray(){}							//default constructor
+	IntArray() = default;							//default constructor
 	explicit IntArray(const int aLength);	//Constructor with parametr
 	IntArray(const IntArray& other);		//Copy constructor
 	~IntArray();
 
 	IntArray& operator=(const IntArray& other);
-	int& operator[](const int index);
+	int& operator[](int index);
 
 	friend std::ostream& operator<<(std::ostream& out, const IntArray& array);
 };
