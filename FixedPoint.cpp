@@ -21,6 +21,14 @@ FixedPoint::FixedPoint(double fp)
 	m_fractionalPart(static_cast<int8_t>(round((fp - m_integerPart) * 100)))	//Use round() to get rid of the rounding error
 {}
 
+int16_t FixedPoint::getIntegerPart() const {
+	return m_integerPart;
+}
+
+int8_t FixedPoint::getFractionalPart() const {
+	return m_fractionalPart;
+}
+
 FixedPoint::operator double() const{
 	return m_integerPart + static_cast<double>(m_fractionalPart) / 100;
 }
@@ -40,7 +48,8 @@ std::istream& operator>>(std::istream& in, FixedPoint& fp) {
 }
 
 bool operator==(const FixedPoint& fp1, const FixedPoint& fp2) {
-	return (fp1.m_integerPart == fp2.m_integerPart && fp1.m_fractionalPart == fp2.m_fractionalPart);
+	return (fp1.getIntegerPart() == fp2.getIntegerPart() &&
+			fp1.getFractionalPart() == fp2.getFractionalPart());
 }
 
 FixedPoint operator+(const FixedPoint& fp1, const FixedPoint& fp2) {
