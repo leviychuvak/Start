@@ -1,16 +1,19 @@
 #include "Monster.h"
 #include <cstdlib> // for rand() 
 
-// Generate a random number between min and max
-int getRandomNumber(int min, int max) 
-{
-	static const double fraction = 1.0 / (static_cast<double>(RAND_MAX) + 1.0);
-	// Evenly distribute the generation of a value from a range
-	return static_cast<int>(rand() * fraction * (max - min + 1) + min);
+namespace {
+	// Generate a random number between min and max
+	int getRandomNumber(int min, int max)
+	{
+		static const double fraction = 1.0 / (static_cast<double>(RAND_MAX) + 1.0);
+		// Evenly distribute the generation of a value from a range
+		return static_cast<int>(rand() * fraction * (max - min + 1) + min);
+	}
+
+	int toInt(Monster::Type type) { return static_cast<int>(type); }
+	Monster::Type toType(int index) { return static_cast<Monster::Type>(index); }
 }
 
-int toInt(Monster::Type type) { return static_cast<int>(type); }
-Monster::Type toType(int index) { return static_cast<Monster::Type>(index); }
 
 Monster::Monster(Type type)
 	:Creature(monsterData.at(toInt(type)))
