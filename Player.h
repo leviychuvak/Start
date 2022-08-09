@@ -9,9 +9,7 @@ private:
     int level{ 1 }; //Starting value
 
 public:
-    Player(const std::string& aName = "Player")
-        :Creature(aName, '@', 10, 1, 0)
-    {}
+    explicit Player(const std::string& aName = "Player");
 
     int getLevel() const { return level; }
 

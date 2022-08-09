@@ -1,9 +1,16 @@
 #include <iostream>
+
 #include "Game.h"
+#include "Player.h"
+#include "Monster.h"
+
+Game::Game(Player& aPlayer)
+	:player(aPlayer)
+{}
 
 void Game::play() {
 	//The game continues until the player wins or dies
-	while (!this->player.hasWon() && fightMonster())
+	while (!player.hasWon() && fightMonster())
 	{}
 
 	if(player.hasWon()) std::cout << "You won the game with " << player.getGold() << " gold!\n";
@@ -32,7 +39,7 @@ bool Game::fightMonster()
 		switch (choise)
 		{
 		case 'r':
-			//Player tryes to feld
+			//Player tries to fled
 			if (tryToFled()) 
 			{
 				//Player doesn't fight with monster
@@ -109,6 +116,6 @@ bool Game::attackPlayer( Monster& monster)
 }
 
 //Trying to feld with chanse 50/50
-bool Game::tryToFled() {
+bool Game::tryToFled() const{
 	return rand() % 2;
 }

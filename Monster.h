@@ -1,22 +1,12 @@
 #ifndef MONSTER_H
 #define MONSTER_H
 
-#include <vector>
+#include <array>
 #include "Creature.h"
 class Monster :
     public Creature
 {
 public:
-	//structure that storage all information about one single monster
-	struct MonsterData
-	{
-		std::string name;
-		char symbol;
-		int health;
-		int damage;
-		int gold;
-	};
-
 	//Types of monsters
 	enum class Type
 	{
@@ -28,15 +18,13 @@ public:
 
 private:
 	//Vector that storage information about all monsters
-	static std::vector<MonsterData> monsterData;
+	static const std::array<CreatureData, static_cast<size_t>(Type::MAX_TYPES)> monsterData;
 
 public:
-	Monster(Type type);
+	explicit Monster(Type type);
 
-	static Type getRandomMonster();
+	static Monster getRandomMonster();
 };
-
-int getRandomNumber(int min, int max);
 
 #endif // !MONSTER_H
 

@@ -9,21 +9,21 @@ int getRandomNumber(int min, int max)
 	return static_cast<int>(rand() * fraction * (max - min + 1) + min);
 }
 
+int toInt(Monster::Type type) { return static_cast<int>(type); }
+Monster::Type toType(int index) { return static_cast<Monster::Type>(index); }
+
 Monster::Monster(Type type)
-	:Creature(monsterData.at(static_cast<int>(type)).name,
-		monsterData.at(static_cast<int>(type)).symbol,
-		monsterData.at(static_cast<int>(type)).health,
-		monsterData.at(static_cast<int>(type)).damage,
-		monsterData.at(static_cast<int>(type)).gold)
+	:Creature(monsterData.at(toInt(type)))
 {}
 
-std::vector<Monster::MonsterData> Monster::monsterData = {
-	{ "dragon", 'D', 20, 4, 100 },
-	{ "orc", 'o', 4, 2, 25 },
-	{ "slime", 's', 1, 1, 10 }
+const std::array<Monster::CreatureData, static_cast<size_t>(Monster::Type::MAX_TYPES)> Monster::monsterData = {
+	CreatureData{.name = "dragon", .symbol = 'D', .health = 20, .damage = 4, .gold = 100},
+	CreatureData{.name = "orc", .symbol = 'o', .health = 4, .damage = 2, .gold = 25},
+	CreatureData{.name = "slime", .symbol = 's', .health = 1, .damage = 1, .gold = 10}
 };
 
 //Returns one random monster from all possible
- Monster::Type Monster::getRandomMonster() {
-	return static_cast<Monster::Type>(getRandomNumber(0, static_cast<int>(Monster::Type::MAX_TYPES) - 1));
+Monster Monster::getRandomMonster() {
+	Monster t(toType(getRandomNumber(0, toInt(Type::MAX_TYPES) - 1)));
+	return t;
 }

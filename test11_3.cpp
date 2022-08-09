@@ -3,6 +3,8 @@
 #include <cstdlib> // for rand() and srand()
 #include <ctime> // for time()
 #include "Game.h"
+#include "Player.h"
+#include "Monster.h"
 
 int main()
 {
