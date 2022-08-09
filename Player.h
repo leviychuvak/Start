@@ -14,7 +14,7 @@ public:
     int getLevel() const { return level; }
 
     void levelUp();
-    bool hasWon();
+    bool hasWon() const;
 
 };
 

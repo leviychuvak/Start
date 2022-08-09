@@ -13,4 +13,4 @@ void Player::levelUp()
 }
 
 //To win player needs get 20th level
-bool Player::hasWon() { return level >= 20; }
+bool Player::hasWon() const { return level >= 20; }
