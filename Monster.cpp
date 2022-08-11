@@ -19,7 +19,7 @@ Monster::Monster(Type type)
 	:Creature(monsterData.at(toInt(type)))
 {}
 
-const std::array<Monster::CreatureData, static_cast<size_t>(Monster::Type::MAX_TYPES)> Monster::monsterData = {
+constexpr std::array<Monster::CreatureData, static_cast<size_t>(Monster::Type::MAX_TYPES)> Monster::monsterData = {
 	CreatureData{.name = "dragon", .symbol = 'D', .health = 20, .damage = 4, .gold = 100},
 	CreatureData{.name = "orc", .symbol = 'o', .health = 4, .damage = 2, .gold = 25},
 	CreatureData{.name = "slime", .symbol = 's', .health = 1, .damage = 1, .gold = 10}
@@ -27,6 +27,5 @@ const std::array<Monster::CreatureData, static_cast<size_t>(Monster::Type::MAX_T
 
 //Returns one random monster from all possible
 Monster Monster::getRandomMonster() {
-	Monster t(toType(getRandomNumber(0, toInt(Type::MAX_TYPES) - 1)));
-	return t;
+	return Monster(toType(getRandomNumber(0, toInt(Type::MAX_TYPES) - 1)));
 }
