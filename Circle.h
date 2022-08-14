@@ -7,7 +7,7 @@
 class Circle: public Shape
 {
 public:
-    explicit Circle(const Point &aCenter = Point(0,0,0), double aRadius = 0.0);
+    explicit Circle(const Point aCenter = Point(), double aRadius = 0.0);
 
     std::ostream &print(std::ostream &out) const override;
 
