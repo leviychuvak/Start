@@ -6,11 +6,9 @@
 class Shape {
 public:
     virtual std::ostream& print(std::ostream &out) const = 0;
-
-    friend std::ostream& operator<<(std::ostream &out, const Shape& shape);
-
     virtual ~Shape() = default;
 };
 
+std::ostream& operator<<(std::ostream &out, const Shape &shape);
 
 #endif //TEST12_SHAPE_H
