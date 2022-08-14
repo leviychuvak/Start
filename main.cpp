@@ -3,13 +3,13 @@
 #include "Circle.h"
 #include "Triangle.h"
 
-double getLargestRadius(std::vector<Shape*> v){
+double getLargestRadius(const std::vector<Shape*> &v) {
     double largestRadius = 0.0;
 
-    for (int i = 0; i < v.size(); ++i) {
-        Circle* temp = dynamic_cast<Circle*>(v[i]);
-        if (temp && temp->getRadius() > largestRadius){
-            largestRadius = temp->getRadius();
+    for(const auto& shape : v){
+        if (auto* temp = dynamic_cast<Circle*>(shape)){
+            if (temp->getRadius()>largestRadius)
+                largestRadius = temp->getRadius();
         }
     }
 
@@ -23,14 +23,14 @@ int main() {
     v.push_back(new Circle(Point(4, 5, 6), 13));
     v.push_back(new Circle(Point(4, 5, 6), 3));
 
-    for (int i = 0; i < v.size(); ++i) {
-        std::cout<<*v[i]<<std::endl;
+    for (auto & i : v) {
+        std::cout<<*i<<std::endl;
     }
 
-    std::cout << "\nThe largest radius is: " << getLargestRadius(v) << '\n'; // реализуйте эту функцию
+    std::cout << "\nThe largest radius is: " << getLargestRadius(v) << '\n';
 
-    for (int i = 0; i < v.size(); ++i) {
-        delete v[i];
+    for (auto & i : v) {
+        delete i;
     }
 
     return 0;
