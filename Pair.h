@@ -8,7 +8,7 @@ private:
     S m_second;
 
 public:
-    Pair(const F &aFirst, const S &aSecond)
+    explicit Pair(const F &aFirst, const S &aSecond)
         : m_first(aFirst), m_second(aSecond)
     {}
 
