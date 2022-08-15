@@ -1,7 +1,7 @@
 #ifndef TEST13_1_PAIR_H
 #define TEST13_1_PAIR_H
 
-#include <iostream>
+#include <utility>
 
 template<class F, class S>
 class Pair {
@@ -10,7 +10,7 @@ private:
     S m_second;
 
 public:
-    explicit Pair(F aFirst, S aSecond)
+     Pair(F aFirst, S aSecond)
         : m_first(std::move(aFirst)), m_second(std::move(aSecond))
     {}
 
