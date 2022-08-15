@@ -1,6 +1,8 @@
 #ifndef TEST13_1_PAIR1_H
 #define TEST13_1_PAIR1_H
 
+#include <iostream>
+
 template<class T>
 class Pair1 {
 private:
@@ -8,8 +10,8 @@ private:
     T m_second;
 
 public:
-    explicit Pair1(const T &aFirst, const T &aSecond)
-        : m_first(aFirst), m_second(aSecond)
+    explicit Pair1(T aFirst,  T aSecond)
+        : m_first(std::move(aFirst)), m_second(std::move(aSecond))
     {}
 
     T& first() { return  m_first; }
