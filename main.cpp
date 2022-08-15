@@ -7,10 +7,9 @@ double getLargestRadius(const std::vector<Shape*> &v) {
     double largestRadius = 0.0;
 
     for(const auto& shape : v){
-        if (auto* temp = dynamic_cast<Circle*>(shape)){
-            if (temp->getRadius()>largestRadius)
-                largestRadius = temp->getRadius();
-        }
+        auto* temp = dynamic_cast<Circle*>(shape);
+        if (temp && temp->getRadius() > largestRadius)
+            largestRadius = temp->getRadius();
     }
 
     return largestRadius;
@@ -23,13 +22,13 @@ int main() {
     v.push_back(new Circle(Point(4, 5, 6), 13));
     v.push_back(new Circle(Point(4, 5, 6), 3));
 
-    for (auto & i : v) {
+    for (auto i : v) {
         std::cout<<*i<<std::endl;
     }
 
     std::cout << "\nThe largest radius is: " << getLargestRadius(v) << '\n';
 
-    for (auto & i : v) {
+    for (auto i : v) {
         delete i;
     }
 

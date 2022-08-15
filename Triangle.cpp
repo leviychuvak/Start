@@ -5,6 +5,6 @@ std::ostream& Triangle::print(std::ostream &out) const {
     return out;
 }
 
-Triangle::Triangle(const Point aFirst, const Point aSecond, const Point aThird)
+Triangle::Triangle( Point aFirst,  Point aSecond,  Point aThird)
     :firstP(std::move(aFirst)), secondP(std::move(aSecond)), thirdP(std::move(aThird))
 {}

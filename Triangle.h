@@ -7,9 +7,9 @@
 class Triangle: public Shape
 {
 public:
-    explicit Triangle(const Point aFirst = Point(),
-                      const Point aSecond = Point(),
-                      const Point aThird = Point());
+    explicit Triangle(Point aFirst = Point(),
+                      Point aSecond = Point(),
+                      Point aThird = Point());
 
     std::ostream &print(std::ostream &out) const override;
 

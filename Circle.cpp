@@ -1,6 +1,6 @@
 #include "Circle.h"
 
-Circle::Circle(const Point aCenter, double aRadius)
+Circle::Circle( Point aCenter, double aRadius)
     : center(std::move(aCenter)), radius(aRadius)
 {}
 
