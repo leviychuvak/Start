@@ -1,18 +1,22 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
+#include <cassert>
 #include "Circle.h"
 #include "Triangle.h"
 
 double getLargestRadius(const std::vector<Shape*> &v) {
-    double largestRadius = 0.0;
 
-    for(const auto& shape : v){
-        auto* temp = dynamic_cast<Circle*>(shape);
-        if (temp && temp->getRadius() > largestRadius)
-            largestRadius = temp->getRadius();
-    }
+    auto max = std::max_element(v.begin(), v.end(), [](auto lhs, auto rhs) {
+        auto* temp1 = dynamic_cast<Circle*>(lhs);
+        auto* temp2 = dynamic_cast<Circle*>(rhs);
+        return temp1 && temp2 && temp1->getRadius() < temp2->getRadius();
+    });
 
-    return largestRadius;
+    auto largestRadius = dynamic_cast<Circle*>(*max);
+    assert(largestRadius != nullptr && "vector does not contain references to Circle objects");
+
+    return largestRadius->getRadius();
 }
 
 int main() {
@@ -21,6 +25,9 @@ int main() {
     v.push_back(new Triangle(Point(1, 2, 3), Point(4, 5, 6), Point(7, 8, 9)));
     v.push_back(new Circle(Point(4, 5, 6), 13));
     v.push_back(new Circle(Point(4, 5, 6), 3));
+    v.push_back(new Triangle(Point(1, 2, 3), Point(4, 5, 6), Point(7, 8, 9)));
+    v.push_back(new Circle(Point(4, 5, 6), 20));
+    v.push_back(new Triangle(Point(1, 2, 3), Point(4, 5, 6), Point(7, 8, 9)));
 
     for (auto i : v) {
         std::cout<<*i<<std::endl;
