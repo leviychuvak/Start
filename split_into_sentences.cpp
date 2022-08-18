@@ -25,6 +25,21 @@ TokenIter findEndOfSentence(TokenIter begin, TokenIter end) {
 template <typename Token>
 vector<Sentence<Token>> SplitIntoSentences(vector<Token> tokens) {
     // Напишите реализацию функции, не копируя объекты типа Token
+
+    std::vector<Sentence<Token>> resultSentences;
+    auto tBegin = begin(tokens);
+
+    while (tBegin != tokens.end())
+    {
+        auto sentenceEnd = findEndOfSentence(tBegin, tokens.end());
+        resultSentences.push_back(Sentence<Token>(
+            std::make_move_iterator(tBegin),
+            std::make_move_iterator(sentenceEnd)
+            ));
+        tBegin = sentenceEnd;
+    }
+
+    return resultSentences;
 }
 
 
