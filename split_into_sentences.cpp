@@ -1,6 +1,7 @@
 ﻿#include "test_runner.h"
 
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -11,6 +12,14 @@ using namespace std;
 // а вектор предложений — vector<Sentence<Token>>.
 template <typename Token>
 using Sentence = vector<Token>;
+
+template <typename TokenIter>
+TokenIter findEndOfSentence(TokenIter begin, TokenIter end) {
+    TokenIter endOfSentenceIter = std::adjacent_find(begin, end, [](const auto& left, const auto& right)
+        {return left.IsEndSentencePunctuation() && !right.IsEndSentencePunctuation(); });
+
+    return endOfSentenceIter == end ? end : next(endOfSentenceIter);
+}
 
 // Класс Token имеет метод bool IsEndSentencePunctuation() const
 template <typename Token>
