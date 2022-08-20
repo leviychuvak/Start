@@ -86,8 +86,42 @@ void TestSplitting() {
             );
 }
 
+struct NoncopyableTokens {
+    TestToken value;
+
+    NoncopyableTokens(const NoncopyableTokens&) = delete;
+    NoncopyableTokens& operator=(const NoncopyableTokens&) = delete;
+
+    NoncopyableTokens(NoncopyableTokens&&) = default;
+    NoncopyableTokens& operator=(NoncopyableTokens&&) = default;
+};
+
+bool operator == (const NoncopyableTokens& lhs, const NoncopyableTokens& rhs) {
+    return lhs.value == rhs.value;
+}
+
+ostream& operator << (ostream& os, const NoncopyableTokens& v) {
+    return os << v.value;
+}
+
+void TestAvoidsCopying() {
+
+    vector<TestToken> v;
+    v.push_back({ "Split" });
+    v.push_back({ "into" });
+    v.push_back({ "sentences" });
+    v.push_back({ "!", true });
+
+    vector<Sentence<TestToken>> expected = SplitIntoSentences(v);
+
+    ASSERT_EQUAL(expected, vector<Sentence<TestToken>>({
+            {{"Split"}, {"into"}, {"sentences"}, {"!", true} }
+        }));
+}
+
 int main() {
     TestRunner tr;
     RUN_TEST(tr, TestSplitting);
+    RUN_TEST(tr, TestAvoidsCopying);
     return 0;
 }
