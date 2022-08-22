@@ -9,30 +9,54 @@ template <typename RandomIt>
 void MergeSort(RandomIt range_begin, RandomIt range_end) {
 	// Напишите реализацию функции,
 	// не копируя сортируемые элементы
-	if (range_end - range_begin < 2) return;
+	if (distance(range_begin, range_end) < 2) return;
 
-	vector<typename RandomIt::value_type> elements(
-		std::make_move_iterator(range_begin), 
-		std::make_move_iterator(range_end));
+	vector<typename RandomIt::value_type> tRange;
+	std::move(range_begin, range_end, std::back_inserter(tRange));
 
-	auto third = std::distance(elements.begin(), elements.end()) / 3;
+	auto third = distance(range_begin, range_end) / 3;
 
-	MergeSort(elements.begin(), elements.begin() + third);
-	MergeSort(elements.begin() + third, elements.begin() + 2 * third);
-	MergeSort(elements.begin() + 2 * third, elements.end());
+	MergeSort(begin(tRange), begin(tRange) + third);
+	MergeSort(begin(tRange) + third, begin(tRange) + third * 2);
+	MergeSort(begin(tRange) + third * 2, end(tRange));
 
-	vector<typename RandomIt::value_type> temp;
-	
+	vector<typename RandomIt::value_type> tMerge;
+
 	std::merge(
-		elements.begin(), elements.begin() + third,
-		elements.begin() + third, elements.begin() + 2 * third,
-		std::back_inserter(temp));
+		std::make_move_iterator(begin(tRange)), std::make_move_iterator(begin(tRange) + third),
+		std::make_move_iterator(begin(tRange) + third), std::make_move_iterator(begin(tRange) + third * 2),
+		std::back_inserter(tMerge));
+
 	std::merge(
-		temp.begin(), temp.end(),
-		elements.begin() + 2 * third, elements.end(),
-		range_begin
-	);
+		std::make_move_iterator(begin(tMerge)), std::make_move_iterator(end(tMerge)),
+		std::make_move_iterator(begin(tRange) + third * 2), std::make_move_iterator(end(tRange)),
+		range_begin);
 }
+
+struct NoncopyableInt {
+	int value;
+
+	NoncopyableInt(int aValue): value(aValue) {}
+
+	NoncopyableInt(const NoncopyableInt&) = delete;
+	NoncopyableInt& operator=(const NoncopyableInt&) = delete;
+
+	NoncopyableInt(NoncopyableInt&&) = default;
+	NoncopyableInt& operator=(NoncopyableInt&&) = default;
+};
+
+bool operator == (const NoncopyableInt& lhs, const NoncopyableInt& rhs) {
+	return lhs.value == rhs.value;
+}
+
+bool operator < (const NoncopyableInt& lhs, const NoncopyableInt& rhs) {
+	return lhs.value < rhs.value;
+}
+
+ostream& operator << (ostream& os, const NoncopyableInt& v) {
+	return os << v.value;
+}
+
 
 void TestIntVector() {
 	vector<int> numbers = { 6, 1, 3, 9, 1, 9, 8, 12, 1 };
@@ -40,8 +64,25 @@ void TestIntVector() {
 	ASSERT(is_sorted(begin(numbers), end(numbers)));
 }
 
+void TestNoncopyableIntVector() {
+	vector< NoncopyableInt> numbers;
+	numbers.push_back(6);
+	numbers.push_back(1);
+	numbers.push_back(3);
+	numbers.push_back(9);
+	numbers.push_back(1);
+	numbers.push_back(9);
+	numbers.push_back(8);
+	numbers.push_back(12);
+	numbers.push_back(1);
+
+	MergeSort(begin(numbers), end(numbers));
+	ASSERT(is_sorted(begin(numbers), end(numbers)));
+}
+
 int main() {
 	TestRunner tr;
 	RUN_TEST(tr, TestIntVector);
+	RUN_TEST(tr, TestNoncopyableIntVector);
 	return 0;
 }
