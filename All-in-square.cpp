@@ -3,13 +3,13 @@
 #include <map>
 #include <utility>
 
-template <typename T> T Sqr(T arg);
+template <typename T> auto Sqr(T &&arg);
 template <typename T1, typename T2> std::pair<T1, T2> Sqr(std::pair<T1, T2> p);
 template <typename T1, typename T2> std::map<T1, T2> Sqr(std::map<T1, T2> m);
 template <typename T1, typename T2> std::map<T1, T2> Sqr(std::map<T1, T2> m);
 
 template <typename T>
-T Sqr(T arg) {
+auto Sqr(T &&arg) {
     return arg * arg;
 }
 
@@ -28,7 +28,7 @@ std::vector<T> Sqr(std::vector<T> v) {
 template <typename T1, typename T2>
 std::map<T1, T2> Sqr(std::map<T1, T2> m) {
     std::map<T1, T2> res;
-    for (auto& [k, v] : m) res.insert(std::make_pair(k, Sqr(v)));
+    for (auto& [k, v] : m) res.emplace(k, Sqr(v));
     return res;
 }
 
@@ -50,7 +50,5 @@ int main()
         std::cout << x.first << ' ' << x.second.first << ' ' << x.second.second << std::endl;
     }
 
-
     return 0;
-
 }
