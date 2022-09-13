@@ -10,61 +10,43 @@ void TeamTasks::AddNewTask(const std::string& person)
 	++staff[person][TaskStatus::NEW];
 }
 
+TaskStatus getNextStatus(TaskStatus ts) {
+	return static_cast<TaskStatus>(static_cast<int>(ts) + 1);
+}
+
+void lessThanCounter(const int statusCount, int & taskCount, TasksInfo & updatedT, TasksInfo& newT, TaskStatus ts) {
+	updatedT[getNextStatus(ts)] += statusCount;
+	newT[getNextStatus(ts)] += statusCount;
+	taskCount -= statusCount;
+}
+void moreThanCounter(const int statusCount, int& taskCount, TasksInfo& updatedT, TasksInfo& newT, TasksInfo& untouchedT, TaskStatus ts) {
+	updatedT[getNextStatus(ts)] += taskCount;
+	newT[getNextStatus(ts)] += taskCount;
+	newT[ts] += statusCount - taskCount;
+	untouchedT[ts] += statusCount - taskCount;
+	taskCount = 0;
+}
+
 std::tuple<TasksInfo, TasksInfo> TeamTasks::PerformPersonTasks(const std::string& person, int task_count)
 {
+	auto& currentPerson = staff[person];
 	TasksInfo updated_tasks, untouched_tasks, new_tasks;
 
-	for (const auto & element : staff[person])
+	for (const auto& [taskStatus, statusCount] : currentPerson)
 	{
-		if (element.second <= 0) continue;
+		if (statusCount <= 0) continue;
 
-		int statusCount = element.second;
-		switch (element.first)
+		switch (taskStatus)
 		{
 		case TaskStatus::NEW:
-			
+		case TaskStatus::IN_PROGRESS:
+		case TaskStatus::TESTING:
 			if (statusCount <= task_count) {
-				updated_tasks[TaskStatus::IN_PROGRESS] += statusCount;
-				new_tasks[TaskStatus::IN_PROGRESS] += statusCount;
-				task_count -= statusCount;
+				lessThanCounter(statusCount, task_count, updated_tasks, new_tasks, taskStatus);
 			}
 			else 
 			{
-				updated_tasks[TaskStatus::IN_PROGRESS] += task_count;
-				new_tasks[TaskStatus::IN_PROGRESS] += task_count;
-				new_tasks[TaskStatus::NEW] += statusCount - task_count;
-				untouched_tasks[TaskStatus::NEW] += statusCount - task_count;
-				task_count = 0;
-			}
-			break;
-		case TaskStatus::IN_PROGRESS:
-			if (statusCount <= task_count) {
-				updated_tasks[TaskStatus::TESTING] += statusCount;
-				new_tasks[TaskStatus::TESTING] += statusCount;
-				task_count -= statusCount;
-			}
-			else
-			{
-				updated_tasks[TaskStatus::TESTING] += task_count;
-				new_tasks[TaskStatus::TESTING] += task_count;
-				new_tasks[TaskStatus::IN_PROGRESS] += statusCount - task_count;
-				untouched_tasks[TaskStatus::IN_PROGRESS] += statusCount - task_count;
-				task_count = 0;
-			}
-			break;
-		case TaskStatus::TESTING:
-			if (statusCount <= task_count) {
-				updated_tasks[TaskStatus::DONE] += statusCount;
-				new_tasks[TaskStatus::DONE] += statusCount;
-				task_count -= statusCount;
-			}
-			else
-			{
-				updated_tasks[TaskStatus::DONE] += task_count;
-				new_tasks[TaskStatus::DONE] += task_count;
-				new_tasks[TaskStatus::TESTING] += statusCount - task_count;
-				untouched_tasks[TaskStatus::TESTING] += statusCount - task_count;
-				task_count = 0;
+				moreThanCounter(statusCount, task_count, updated_tasks, new_tasks, untouched_tasks, taskStatus);
 			}
 			break;
 		case TaskStatus::DONE:
@@ -74,7 +56,7 @@ std::tuple<TasksInfo, TasksInfo> TeamTasks::PerformPersonTasks(const std::string
 		}
 	}
 
-	staff[person] = std::move(new_tasks);
+	currentPerson = std::move(new_tasks);
 
 	return std::make_tuple(updated_tasks, untouched_tasks);
 }
