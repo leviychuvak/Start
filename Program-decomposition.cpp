@@ -4,6 +4,8 @@
 #include <map>
 #include <unordered_map>
 #include <algorithm>
+#include <unordered_set>
+#include <memory>
 
 enum class QueryType {
     NewBus,
@@ -113,18 +115,20 @@ std::ostream& operator << (std::ostream& os, const AllBusesResponse& r) {
 
 class BusManager {
 public:
-    void AddBus(const std::string& bus, std::vector<std::string>&& stops) {
-        std::ranges::move(stops, std::back_inserter(buses_to_stops[bus]));
-        for (const auto& stop : buses_to_stops[bus]) {
-            stops_to_buses[stop].push_back(bus);
+    void AddBus( std::string&& bus, std::vector<std::string>&& stops) {
+        std::unordered_set<std::shared_ptr<std::string>> st;
+        for (const auto& stop : stops) {
+            stops_to_buses[stop].insert(std::make_shared<std::string>(bus));
+            st.insert(std::make_shared<std::string>(stop));
         }
+        buses_to_stops.insert({ std::move(bus), std::move(st) });
     }
 
     BusesForStopResponse GetBusesForStop(const std::string& stop) const {
         BusesForStopResponse res;
         if (!stops_to_buses.contains(stop)) return res;
         for (const auto& bus : stops_to_buses.at(stop)) {
-            res.buses.push_back(bus);
+            res.buses.push_back(*bus);
         }
         return res;
     }
@@ -133,14 +137,18 @@ public:
         StopsForBusResponse res;
         if (!buses_to_stops.contains(bus)) return res;
         for (const auto& stop : buses_to_stops.at(bus)) {
-            res.stops.push_back(stop);
-            if (stops_to_buses.at(stop).size() == 1) {
+            res.stops.push_back(*stop);
+            if (stops_to_buses.at(*stop).size() == 1) {
                 res.buses.push_back({ "no interchange" });
             }
             else{
                 std::vector<std::string> temp;
-                copy_if(stops_to_buses.at(stop).begin(), stops_to_buses.at(stop).end(), std::back_inserter(temp),
-                    [&bus](const auto& str) {return str != bus; });
+                /*copy_if(stops_to_buses.at(stop).begin(), stops_to_buses.at(stop).end(), std::back_inserter(temp),
+                    [&bus](const auto& str) {return str != bus; });*/
+                for (const auto& b : stops_to_buses.at(*stop)) {
+                    if (bus != (*b)) 
+                        temp.push_back(*b);
+                }
                 res.buses.push_back(std::move(temp));
             }
         }
@@ -151,13 +159,15 @@ public:
         AllBusesResponse res;
         if (buses_to_stops.empty()) return res;
         for (const auto& bus : buses_to_stops) {
-            res.buses[bus.first] = bus.second;
+            for (const auto& stop : bus.second) {
+                res.buses[bus.first].push_back(*stop);
+            }
         }
         return res;
     }
 private:
-    std::unordered_map<std::string, std::vector<std::string>> stops_to_buses;
-    std::unordered_map<std::string, std::vector<std::string>> buses_to_stops;
+    std::unordered_map<std::string, std::unordered_set<std::shared_ptr<std::string>>> stops_to_buses;
+    std::unordered_map<std::string, std::unordered_set<std::shared_ptr<std::string>>> buses_to_stops;
 };
 
 int main() {
