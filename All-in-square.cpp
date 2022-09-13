@@ -15,7 +15,7 @@ auto Sqr(T &&arg) {
 
 template <typename T1, typename T2>
 std::pair<T1, T2> Sqr(std::pair<T1, T2> p) {
-    return std::make_pair(Sqr(p.first), Sqr(p.second));
+    return { Sqr(p.first), Sqr(p.second) };
 }
 
 template <typename T>
