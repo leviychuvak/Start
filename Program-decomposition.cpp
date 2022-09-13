@@ -20,7 +20,7 @@ struct Query {
 };
 
 std::istream& operator >> (std::istream& is, Query& q) {
-    std::string inputOperationType{};
+    std::string inputOperationType;
     is >> inputOperationType;
 
     if (inputOperationType == "NEW_BUS") {
@@ -33,7 +33,7 @@ std::istream& operator >> (std::istream& is, Query& q) {
         for (size_t i = 0; i < busCount; ++i){
             std::string stop{};
             is >> stop;
-            q.stops.push_back(stop);
+            q.stops.push_back(std::move(stop));
         }
         return is;
     }
@@ -60,13 +60,14 @@ struct BusesForStopResponse {
 };
 
 std::ostream& operator << (std::ostream& os, const BusesForStopResponse& r) {
-    if (r.buses.size()<=0) os << "No stop";
-    else {
-        for (const auto& bus : r.buses) {
-            os << bus << " ";
-        }
+    if (r.buses.empty()) 
+        return os << "No stop"<<std::endl;
+    os << "{";
+    for (const auto& bus : r.buses) {
+        os << bus << " ";
     }
-    os << std::endl;
+    
+    os <<"}" << std::endl;
     return os;
 }
 
@@ -77,16 +78,15 @@ struct StopsForBusResponse {
 
 std::ostream& operator << (std::ostream& os, const StopsForBusResponse& r) {
     if (r.stops.empty()) {
-        os << "No bus"<<std::endl;
-        return os;
+        return os << "No bus" << std::endl;
     }
 
     for (size_t i = 0; i < r.stops.size(); ++i)
     {
-        os << "Stop " << r.stops[i] << ": ";
+        os << "Stop " << r.stops[i] << ": {";
         for (const auto& bus : r.buses[i])
             os << bus << " ";
-        os << std::endl;
+        os <<"}" << std::endl;
     }
     return os;
 }
@@ -102,11 +102,11 @@ std::ostream& operator << (std::ostream& os, const AllBusesResponse& r) {
     }
 
     for (const auto& bus : r.buses) {
-        os << "Buss " << bus.first << ": ";
+        os << "Buss " << bus.first << ": {";
         for (const auto& stop : bus.second) {
             os << stop << " ";
         }
-        os << std::endl;
+        os << "}" << std::endl;
     }
     return os;
 }
@@ -122,7 +122,7 @@ public:
 
     BusesForStopResponse GetBusesForStop(const std::string& stop) const {
         BusesForStopResponse res;
-        if (stops_to_buses.count(stop) == 0) return res;
+        if (!stops_to_buses.contains(stop)) return res;
         for (const auto& bus : stops_to_buses.at(stop)) {
             res.buses.push_back(bus);
         }
@@ -131,7 +131,7 @@ public:
 
     StopsForBusResponse GetStopsForBus(const std::string& bus) const {
         StopsForBusResponse res;
-        if (buses_to_stops.count(bus) == 0) return res;
+        if (!buses_to_stops.contains(bus)) return res;
         for (const auto& stop : buses_to_stops.at(bus)) {
             res.stops.push_back(stop);
             if (stops_to_buses.at(stop).size() == 1) {
@@ -140,7 +140,7 @@ public:
             else{
                 std::vector<std::string> temp;
                 copy_if(stops_to_buses.at(stop).begin(), stops_to_buses.at(stop).end(), std::back_inserter(temp),
-                    [bus](const auto& str) {return str != bus; });
+                    [&bus](const auto& str) {return str != bus; });
                 res.buses.push_back(std::move(temp));
             }
         }
