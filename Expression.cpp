@@ -3,26 +3,35 @@
 #include <string>
 
 namespace {
-    operation getOp() {
+    int getInt() {
+        int t;
+        std::cin >> t;
+        std::cin.ignore(32767, '\n');
+        return t;
+    }
+
+    Expression::ArefmeticOperation getOp() {
+        //get an arithmetic operator
         char tCh;
         std::cin >> tCh;
+        //get a second operand of operation
         int tInt;
         std::cin >> tInt;
         std::cin.ignore(32767, '\n');
-        return (tCh == '+' || tCh == '-') ? 
-            std::make_pair(std::make_pair(tCh, 0), tInt) :
-            std::make_pair(std::make_pair(tCh, 1), tInt);
+
+        if (tCh == '+' || tCh == '-')
+            return {._operator = tCh, ._priority = 0, ._value = tInt };
+        if (tCh == '*' || tCh == '/')
+            return { ._operator = tCh, ._priority = 1, ._value = tInt };
+       
+        throw std::logic_error("Something went wrong, unknown arithmetic operator was given");
     }
 }
 
 void Expression::build()
 {
-    std::cin >> start;
-    std::cin.ignore(32767, '\n');
-
-    int opCount;
-    std::cin >> opCount;
-    std::cin.ignore(32767, '\n');
+    start = getInt();
+    int opCount = getInt();
 
     for (size_t i = 0; i < opCount; i++)
     {
@@ -30,21 +39,29 @@ void Expression::build()
     }
 }
 
-void Expression::print()
+void Expression::print() const
 {
     std::string res{ std::to_string(start) };
     
     for (size_t i = 0; i < operations.size(); ++i)
     {
-        auto v = (operations[i].second >= 0) ?
-            std::to_string(operations[i].second) :
-            "(" + std::to_string(operations[i].second) + ")";
+        const auto& [iOperator, iPriority, iValue] = operations[i];
+
+        //check if second operand of current operation is negative number take it in brackets
+        auto v = (operations[i]._value >= 0) ?
+            std::to_string(iValue) :
+            "(" + std::to_string(iValue) + ")";
+
+        //if it`s first operation in range
         if (!i) {
-            res = res + " " + operations[i].first.first + " " + v;
+            res = res + " " + iOperator + " " + v;
             continue;
         }
-        if (operations[i].first.second > operations[i-1].first.second) res = "(" + res + ")";
-        res = res + " " + operations[i].first.first + " " + v;
+
+        //if previous operation has lower priority take first operand(which can be expression) in brackets
+        if (iPriority > operations[i-1]._priority) res = "(" + res + ")";
+
+        res = res + " " + iOperator + " " + v;
     }
 
     std::cout << res << std::endl;

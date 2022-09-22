@@ -4,20 +4,25 @@
 #include <vector>
 #include <utility>
 
-using aOperator = std::pair<char, int>;
-using operation = std::pair<aOperator, int>;
+
 
 class Expression
 {
-public:
-    
-    void build();
+public:    
+    struct ArefmeticOperation
+    {
+        char _operator;
+        int _priority;
+        int _value;
+    };
 
-    void print();
+    void build();
+    void print() const;
 
 private:
     int start;
-    std::vector<operation> operations;
+    std::vector<ArefmeticOperation> operations;
+
 };
 
 #endif // !EXPRESSION_H
