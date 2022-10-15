@@ -20,19 +20,19 @@ enum class LogicalOperator
 	Or
 };
 
-namespace Nodes {
+namespace nodes {
 	class Node
 	{
 	public:
-		virtual ~Node(){}
+		virtual ~Node() = default;
 		virtual bool Evaluate(Date date, std::string event) const = 0;
 	};
 
 	class Empty : public Node
 	{
 	public:
-		virtual ~Empty() {}
-		bool Evaluate(Date date, std::string event) const override {
+		virtual ~Empty() = default;
+		bool Evaluate([[maybe_unused]] Date date, std::string event) const override {
 			return true;
 		}
 	};
@@ -47,7 +47,7 @@ namespace Nodes {
 		explicit DateComparison(Comparison comp, Date data)
 			:comparator(std::move(comp)), dataEtalon(std::move(data))
 		{}
-		virtual ~DateComparison() {}
+		virtual ~DateComparison() = default;
 		virtual bool Evaluate(Date date, std::string event) const override;
 	};
 
@@ -61,7 +61,7 @@ namespace Nodes {
 		explicit EventComparison(Comparison comp, std::string event)
 			:comparator(std::move(comp)), eventEtalon(std::move(event))
 		{}
-		virtual ~EventComparison() {}
+		virtual ~EventComparison() = default;
 		virtual bool Evaluate(Date date, std::string event) const override;
 	};
 
@@ -77,7 +77,7 @@ namespace Nodes {
 			std::shared_ptr<Node> aRightOperand)
 			:logicalOperation(std::move(aLogicalOperator)), leftOperand(aLeftOperand), rightOperand(aRightOperand)
 		{}
-		virtual ~LogicalOperation() {}
+		virtual ~LogicalOperation() = default;
 		virtual bool Evaluate(Date date, std::string event) const override;
 
 	};

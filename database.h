@@ -19,7 +19,7 @@ public:
 	{}
 
 	Date getDate() const { return date; }
-	std::string getEvent() const { return event; }
+	std::string_view getEvent() const { return event; }
 };
 
 std::ostream& operator<<(std::ostream& out, const Entry& aEntry);
@@ -28,7 +28,7 @@ std::ostream& operator<<(std::ostream& out, const Entry& aEntry);
 class Database
 {
 public:
-	bool Add(const Date& aDate, const std::string aEvent);
+	bool Add(const Date& aDate, const std::string &aEvent);
 	void Print(std::ostream& out) const;
 	Entry Last(const Date& date) const;
 
@@ -52,7 +52,7 @@ private:
 		std::vector<std::string_view> eventVec;
 	};
 
-	std::map<Date, EventsList> bd;
+	std::map<Date, EventsList> db;
 };
 
 
@@ -62,7 +62,7 @@ int16_t Database::RemoveIf(Predicat predicat)
 	int16_t counter{ 0 };
 	std::vector<Date> datesToErase;
 
-	for (auto& [date, eventList] : bd) {
+	for (auto& [date, eventList] : db) {
 		auto it = std::stable_partition(eventList.eventVec.begin(), eventList.eventVec.end(), [&](const auto& event)
 			{
 				return !predicat(date, static_cast<std::string>(event));
@@ -78,7 +78,7 @@ int16_t Database::RemoveIf(Predicat predicat)
 	}
 
 	for (const auto& date : datesToErase) {
-		bd.erase(date);
+		db.erase(date);
 	}
 
 	return counter;
@@ -88,7 +88,7 @@ template<typename Predicat>
 std::vector<Entry> Database::FindIf(Predicat predicat) const
 {
 	std::vector<Entry> result;
-	for (const auto& [date, eventList] : bd) {
+	for (const auto& [date, eventList] : db) {
 		for (const auto& event : eventList.eventSet) {
 			if (predicat(date, event))
 				result.emplace_back(date, event);

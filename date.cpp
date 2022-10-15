@@ -2,36 +2,6 @@
 #include <iomanip>
 #include <string>
 
-bool operator<(const Date& left, const Date& right)
-{
-    return left.toString() < right.toString();
-}
-
-bool operator<=(const Date& left, const Date& right)
-{
-    return !(left > right);
-}
-
-bool operator>(const Date& left, const Date& right)
-{
-    return left.toString() > right.toString();
-}
-
-bool operator>=(const Date& left, const Date& right)
-{
-    return !(left < right);
-}
-
-bool operator==(const Date& left, const Date& right)
-{
-    return left.toString() == right.toString();
-}
-
-bool operator!=(const Date& left, const Date& right)
-{
-    return !(left == right);
-}
-
 std::ostream& operator<<(std::ostream& out, const Date& date)
 {
     out << std::setfill('0') << std::setw(4) << date.year << "-" 

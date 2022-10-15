@@ -10,7 +10,7 @@ vector<Token> Tokenize(istream& cl) {
   char c;
   while (cl >> c) {
     if (isdigit(c)) {
-      string date(1, c);
+        string date{c};
       for (int i = 0; i < 3; ++i) {
         while (isdigit(cl.peek())) {
           date += cl.get();
@@ -19,63 +19,63 @@ vector<Token> Tokenize(istream& cl) {
           date += cl.get(); // Consume '-'
         }
       }
-      tokens.push_back({date, TokenType::DATE});
+      tokens.emplace_back(std::move(date), TokenType::DATE);
     } else if (c == '"') {
       string event;
       getline(cl, event, '"');
-      tokens.push_back({event, TokenType::EVENT});
+      tokens.emplace_back(std::move(event), TokenType::EVENT);
     } else if (c == 'd') {
       if (cl.get() == 'a' && cl.get() == 't' && cl.get() == 'e') {
-        tokens.push_back({"date", TokenType::COLUMN});
+        tokens.emplace_back("date", TokenType::COLUMN);
       } else {
         throw logic_error("Unknown token");
       }
     } else if (c == 'e') {
       if (cl.get() == 'v' && cl.get() == 'e' && cl.get() == 'n' &&
           cl.get() == 't') {
-        tokens.push_back({"event", TokenType::COLUMN});
+        tokens.emplace_back("event", TokenType::COLUMN);
       } else {
         throw logic_error("Unknown token");
       }
     } else if (c == 'A') {
       if (cl.get() == 'N' && cl.get() == 'D') {
-        tokens.push_back({"AND", TokenType::LOGICAL_OP});
+        tokens.emplace_back("AND", TokenType::LOGICAL_OP);
       } else {
         throw logic_error("Unknown token");
       }
     } else if (c == 'O') {
       if (cl.get() == 'R') {
-        tokens.push_back({"OR", TokenType::LOGICAL_OP});
+        tokens.emplace_back("OR", TokenType::LOGICAL_OP);
       } else {
         throw logic_error("Unknown token");
       }
     } else if (c == '(') {
-      tokens.push_back({"(", TokenType::PAREN_LEFT});
+      tokens.emplace_back("(", TokenType::PAREN_LEFT);
     } else if (c == ')') {
-      tokens.push_back({")", TokenType::PAREN_RIGHT});
+      tokens.emplace_back(")", TokenType::PAREN_RIGHT);
     } else if (c == '<') {
       if (cl.peek() == '=') {
         cl.get();
-        tokens.push_back({"<=", TokenType::COMPARE_OP});
+        tokens.emplace_back("<=", TokenType::COMPARE_OP);
       } else {
-        tokens.push_back({"<", TokenType::COMPARE_OP});
+        tokens.emplace_back("<", TokenType::COMPARE_OP);
       }
     } else if (c == '>') {
       if (cl.peek() == '=') {
         cl.get();
-        tokens.push_back({">=", TokenType::COMPARE_OP});
+        tokens.emplace_back(">=", TokenType::COMPARE_OP);
       } else {
-        tokens.push_back({">", TokenType::COMPARE_OP});
+        tokens.emplace_back(">", TokenType::COMPARE_OP);
       }
     } else if (c == '=') {
       if (cl.get() == '=') {
-        tokens.push_back({"==", TokenType::COMPARE_OP});
+        tokens.emplace_back("==", TokenType::COMPARE_OP);
       } else {
         throw logic_error("Unknown token");
       }
     } else if (c == '!') {
       if (cl.get() == '=') {
-        tokens.push_back({"!=", TokenType::COMPARE_OP});
+        tokens.emplace_back("!=", TokenType::COMPARE_OP);
       } else {
         throw logic_error("Unknown token");
       }

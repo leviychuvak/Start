@@ -1,7 +1,7 @@
 ﻿#include "database.h"
 #include "date.h"
 #include "condition_parser.h"
-//#include "node.h"
+#include "node.h"
 #include "test_runner.h"
 
 #include <stdexcept>
@@ -13,7 +13,7 @@ string ParseEvent(istream& is) {
     std::getline(is, event);
     auto it = event.find_first_not_of(" ");
     if (it != std::string::npos) {
-        event.erase(0, it);
+        return event.substr(it);
     }
 
     return event;

@@ -16,12 +16,7 @@ public:
 
 	friend std::ostream& operator<< (std::ostream& out, const Date& date);
 
-	friend bool operator<(const Date& left, const Date& right);
-	friend bool operator<=(const Date& left, const Date& right);
-	friend bool operator>(const Date& left, const Date& right);
-	friend bool operator>=(const Date& left, const Date& right);
-	friend bool operator==(const Date& left, const Date& right);
-	friend bool operator!=(const Date& left, const Date& right);
+	auto operator<=>(const Date&) const = default;
 };
 
  Date ParseDate(std::istream& is);

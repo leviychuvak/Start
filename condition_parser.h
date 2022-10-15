@@ -7,6 +7,6 @@
 
 using namespace std;
 
-shared_ptr<Nodes::Node> ParseCondition(istream& is);
+shared_ptr<nodes::Node> ParseCondition(istream& is);
 
 void TestParseCondition();

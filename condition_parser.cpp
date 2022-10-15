@@ -5,7 +5,7 @@
 using namespace std;
 
 template <class It> 
-shared_ptr<Nodes::Node> ParseComparison(It& current, It end) {
+shared_ptr<nodes::Node> ParseComparison(It& current, It end) {
   if (current == end) {
     throw logic_error("Expected column name: date or event");
   }
@@ -52,19 +52,19 @@ shared_ptr<Nodes::Node> ParseComparison(It& current, It end) {
 
   if (column.value == "date") {
     istringstream is(value);
-    return make_shared<Nodes::DateComparison>(cmp, ParseDate(is));
+    return make_shared<nodes::DateComparison>(cmp, ParseDate(is));
   } else {
-    return make_shared<Nodes::EventComparison>(cmp, value);
+    return make_shared<nodes::EventComparison>(cmp, value);
   }
 }
 
 template <class It>
-shared_ptr<Nodes::Node> ParseExpression(It& current, It end, unsigned precedence) {
+shared_ptr<nodes::Node> ParseExpression(It& current, It end, unsigned precedence) {
   if (current == end) {
-    return shared_ptr<Nodes::Node>();
+    return shared_ptr<nodes::Node>();
   }
 
-  shared_ptr<Nodes::Node> left;
+  shared_ptr<nodes::Node> left;
 
   if (current->type == TokenType::PAREN_LEFT) {
     ++current; // consume '('
@@ -95,7 +95,7 @@ shared_ptr<Nodes::Node> ParseExpression(It& current, It end, unsigned precedence
 
     ++current; // consume op
 
-    left = make_shared<Nodes::LogicalOperation>(
+    left = make_shared<nodes::LogicalOperation>(
         logical_operation, left, ParseExpression(current, end, current_precedence)
     );
   }
@@ -103,13 +103,13 @@ shared_ptr<Nodes::Node> ParseExpression(It& current, It end, unsigned precedence
   return left;
 }
 
-shared_ptr<Nodes::Node> ParseCondition(istream& is) {
+shared_ptr<nodes::Node> ParseCondition(istream& is) {
   auto tokens = Tokenize(is);
   auto current = tokens.begin();
   auto top_node = ParseExpression(current, tokens.end(), 0u);
 
   if (!top_node) {
-    top_node = make_shared<Nodes::Empty>();
+    top_node = make_shared<nodes::Empty>();
   }
 
   if (current != tokens.end()) {
