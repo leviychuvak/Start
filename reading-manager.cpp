@@ -16,20 +16,20 @@ private:
 	static constexpr size_t MAX_PAGES_COUNT = 1000 + 1;
 
 public:
-	enum class query_type
+	enum class QueryType
 	{
 		READ,
 		CHEER
 	};
 
-	static query_type getQueryType() {
+	static QueryType getQueryType() {
 		while (true)
 		{
 			std::string type;
 			std::cin >> type;
 			std::cin.ignore(32767, '\n');
-			if (type == "READ") return query_type::READ;
-			if (type == "CHEER") return query_type::CHEER;
+			if (type == "READ") return QueryType::READ;
+			if (type == "CHEER") return QueryType::CHEER;
 			std::cout << "Oops, that input is invalid.  Please try again." << std::endl;
 		}
 	}
@@ -123,18 +123,25 @@ int main() {
 	int query_count = getInt();
 
 	for (int query_id = 0; query_id < query_count; ++query_id) {
-		//query_type звучит как будто из него стоит сделать перечисление
-		ReadingManager::query_type query_type = ReadingManager::getQueryType();
+		//QueryType звучит как будто из него стоит сделать перечисление
+		ReadingManager::QueryType queryType = ReadingManager::getQueryType();
 		int user_id = getInt();
 
-		if (query_type == ReadingManager::query_type::READ) {
-			int page_count = getInt();
+		switch (queryType)
+		{
+		case ReadingManager::QueryType::READ:
+			int page_count;
+			page_count = getInt();
 			manager->read(user_id, page_count);
-		}
-		else if (query_type == ReadingManager::query_type::CHEER) {
+			break;
+		case ReadingManager::QueryType::CHEER:
 			//лучше всегда использовать std::endl, т.к. он очищает буфер за собой
 			std::cout << std::setprecision(6) << manager->cheer(user_id) << std::endl;
+			break;
+		default:
+			break;
 		}
+		
 	}
 
 	return 0;
