@@ -1,19 +1,16 @@
 ﻿#include <iomanip>
 #include <iostream>
 #include <vector>
-#include <utility>
-#include <algorithm>
-#include <string>
 #include <memory>
-#include <deque>
+#include <array>
 #include <cassert>
 
 //using namespace std;  лучше так не делать, чтобы не было конфликтов имен
 
 class ReadingManager {
 private:
-	static constexpr size_t MAX_USERS_COUNT = 100'000 + 1;
-	static constexpr size_t MAX_PAGES_COUNT = 1000 + 1;
+	static constexpr size_t MAX_USERS_COUNT = 100'000;
+	static constexpr size_t MAX_PAGES_COUNT = 1000;
 
 public:
 	enum class QueryType
@@ -36,8 +33,7 @@ public:
 
 	// Магические числа, лучше вынести в константы
 	ReadingManager()
-		: users_(MAX_USERS_COUNT, 0),
-		arr(MAX_PAGES_COUNT, 0)
+		: arr(MAX_PAGES_COUNT, 0)
 	{}
 
 	//Названия методов с маленькой буквы
@@ -78,7 +74,7 @@ public:
 
 //Поля нужно приватными делать
 private:
-	std::deque<int> users_; // <id -> pages_count>		
+	std::array<int, MAX_USERS_COUNT> users_; // <id -> pages_count>		
 	//users_id используется только для получения количества пользователей которые читают книгу, если не нужно хранить их id, лучше заменить на счетчик
 	std::vector<int> users_id; // <set<id>> 
 	std::vector<int> arr;		//page-> number of users which read this page
